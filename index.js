@@ -11,7 +11,7 @@ const pricelistRouter = require('./routes/pricelist');
 const PORT = process.env.PORT;
 var app = express();
 
-app.use(cors());
+app.use(cors({credentials: true, origin: process.env.CLIENT}));
 app.use(cookieParser());
 app.use(express.json());
 
