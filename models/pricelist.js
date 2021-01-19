@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 var pricelistSchema = new Schema({
     category: String,
     name: String,
+    qty: Number,
     price: Number
 })
 
