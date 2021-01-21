@@ -11,7 +11,7 @@ var OrderSchema = new Schema({
     basket: [{
         name: String, 
         desc: String,
-        quantity: Number, 
+        qty: Number, 
         total: Number
     }]
 })
