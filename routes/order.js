@@ -10,10 +10,11 @@ var Pricelist = require('../models/pricelist');
 
 //Input an Order
 router.post('/add', (req,res) => {
-    if (req.body && req.body.buyer && req.body.address && req.body.contact && req.body.basket) {
+    if (req.body && req.body.buyer && req.body.address && req.body.contact && req.body.basket.length > 0) {
+        
         async.waterfall([
             function (calculateTotal) {
-                let totalPrice = 0;
+                let totalPrice = req.body.ongkir;
                 for (let i = 0; i < req.body.basket.length; i++) {
                     let product = req.body.basket[i];
                     product.total = product.qty * product.price;
@@ -28,11 +29,13 @@ router.post('/add', (req,res) => {
                     contact: req.body.contact,
                     sendDate: new Date(),
                     orderDate: moment().utcOffset(7),
+                    paid: req.body.paid, 
                     total: totalPrice,
-                    basket: req.body.basket
+                    basket: req.body.basket, 
+                    ongkir: req.body.ongkir
                 })
                 new_order.save((err) => {
-                    if (err) saveOrder('Coba ulangi kembali');
+                    if (err) saveOrder(err);
                     else saveOrder(null);
                 })
             }
@@ -46,11 +49,33 @@ router.post('/add', (req,res) => {
 });
 
 //Display all Orders
-router.all('/all', (req,res) => {
+router.get('/all', (req,res) => {
     Order.find((err,orders) => {
         if (!err) res.json({status: 'ok', msg: orders})
         else res.json({status: 'err', msg: 'Coba ulang kembali'})
     })
 })
 
+// Return all baskets in a particular day
+router.get('/baskets', (req,res) => {
+    Order.find( (err,orders) => {
+        if (!err) {
+            let baskets = [];
+            for (let i = 0; i< orders.length; i++) {
+                baskets.push(orders[i].basket);
+            }
+            res.json({status: 'ok', msg: baskets})
+        } else res.json({status: 'err', msg: 'Coba ulangi kembali'})
+    })
+})
+
+router.get('/data', (req,res) => {
+    Order.find((err,orders) => {
+        if (!err) {
+            // let data =  [];
+            res.json({status: 'ok', msg: orders});
+        }
+        else res.json({status: 'err', msg: 'Coba ulangi kembali'});
+    })
+})
 module.exports = router;

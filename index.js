@@ -7,6 +7,7 @@ dotenv.config();
 
 const orderRouter = require('./routes/order');
 const pricelistRouter = require('./routes/pricelist');
+const salesRouter = require('./routes/sales');
 
 const PORT = process.env.PORT;
 var app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use('/order', orderRouter);
 app.use('/pricelist', pricelistRouter);
+app.use('/sales', salesRouter);
 
 mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;

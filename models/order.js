@@ -8,12 +8,15 @@ var OrderSchema = new Schema({
     sendDate: Date, 
     orderDate: Date, 
     total: Number, 
+    ongkir: Number,
     basket: [{
         name: String, 
         desc: String,
         qty: Number, 
         total: Number
-    }]
+    }],
+    paid: Boolean,
+    
 })
 
 var Order = mongoose.model('Order', OrderSchema);
