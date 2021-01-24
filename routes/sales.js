@@ -21,6 +21,13 @@ router.get('/revenue', (req,res) => {
     res.json({startWeek, dateNow, diffDaily, startYear, dateNow, diffMonthly});
 })
 
+router.get('/now', (req,res) => {
+    let date = new Date();
+    date = JSON.stringify(date);
+    let dateNow = moment(date).format("DD/MM.YYYY");
+    res.json({dateNow});
+})
+
 // $gte: Greater than Equal to
 // $lte: Less than Equal to 
 

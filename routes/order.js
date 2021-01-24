@@ -2,6 +2,7 @@ var express = require('express');
 var moment = require('moment');
 var async = require('async');
 var router = express.Router();
+var moment = require('moment');
 
 
 var Order = require('../models/order');
@@ -23,12 +24,16 @@ router.post('/add', (req,res) => {
                 calculateTotal(null, totalPrice);
             },
             function (totalPrice, saveOrder) {
+                // let sendDateString = JSON.stringify(req.body.sendDate);
+                let fromattedSendDate = moment(req.body.sendDate).format('DD/MM/YYYY');
+                let formattedOrderDate = moment(new Date()).format('DD/MM/YYYY');
                 let new_order = new Order({
                     buyer: req.body.buyer,
                     address: req.body.address,
                     contact: req.body.contact,
-                    sendDate: new Date(),
-                    orderDate: moment().utcOffset(7),
+                    sendDateString: fromattedSendDate,
+                    sendDate: req.body.sendDate,
+                    orderDate: formattedOrderDate,
                     paid: req.body.paid, 
                     total: totalPrice,
                     basket: req.body.basket, 
@@ -77,5 +82,15 @@ router.get('/data', (req,res) => {
         }
         else res.json({status: 'err', msg: 'Coba ulangi kembali'});
     })
+})
+
+router.get('/find', (req,res) => {
+    if (req.query.date) {
+        Order.find({sendDateString: req.query.date}, (err,orders) => {
+            if (!err) res.json({status: 'ok', msg: orders})
+            else res.json({status: 'err', msg: err})
+        })
+    } else res.json({status: 'err', msg: err})
+    
 })
 module.exports = router;

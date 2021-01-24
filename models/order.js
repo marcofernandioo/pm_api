@@ -5,8 +5,9 @@ var OrderSchema = new Schema({
     buyer: String, 
     address: String, 
     contact: String, 
-    sendDate: Date, 
-    orderDate: Date, 
+    sendDateString: String, 
+    orderDate: String,
+    sendDate: Date,
     total: Number, 
     ongkir: Number,
     basket: [{
