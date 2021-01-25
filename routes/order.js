@@ -11,7 +11,7 @@ var Pricelist = require('../models/pricelist');
 
 //Input an Order
 router.post('/add', (req,res) => {
-    if (req.body && req.body.buyer && req.body.address && req.body.contact && req.body.basket.length > 0) {
+    if (req.body && req.body.buyer && req.body.address && req.body.contact && req.body.basket.length > 0 && req.body.fakelist) {
         
         async.waterfall([
             function (calculateTotal) {
@@ -24,7 +24,6 @@ router.post('/add', (req,res) => {
                 calculateTotal(null, totalPrice);
             },
             function (totalPrice, saveOrder) {
-                // let sendDateString = JSON.stringify(req.body.sendDate);
                 let fromattedSendDate = moment(req.body.sendDate).format('DD/MM/YYYY');
                 let formattedOrderDate = moment(new Date()).format('DD/MM/YYYY');
                 let new_order = new Order({
@@ -37,7 +36,8 @@ router.post('/add', (req,res) => {
                     paid: req.body.paid, 
                     total: totalPrice,
                     basket: req.body.basket, 
-                    ongkir: req.body.ongkir
+                    ongkir: req.body.ongkir,
+                    fakelist: req.body.fakelist
                 })
                 new_order.save((err) => {
                     if (err) saveOrder(err);
@@ -74,6 +74,7 @@ router.get('/baskets', (req,res) => {
     })
 })
 
+// Return ALL of the orders
 router.get('/data', (req,res) => {
     Order.find((err,orders) => {
         if (!err) {
@@ -84,6 +85,7 @@ router.get('/data', (req,res) => {
     })
 })
 
+// Find Orders based on Date
 router.get('/find', (req,res) => {
     if (req.query.date) {
         Order.find({sendDateString: req.query.date}, (err,orders) => {
@@ -92,5 +94,52 @@ router.get('/find', (req,res) => {
         })
     } else res.json({status: 'err', msg: err})
     
+})
+
+// Find an Order based on ID
+router.get('/findone/:id', (req,res) => {
+    Order.findById(req.params.id, (err,data) => {
+        if (!err) res.json({status:'ok', msg:data});
+        else res.json({status: 'err', msg:err});
+    })
+})
+
+// Delete an Order
+router.get('/delete/:id', (req,res) => {
+    Order.findOneAndDelete({_id: req.params.id}, (err) => {
+        if (!err) res.json({status: 'ok', msg: 'Orderan telah dihapus'});
+        else res.json({status: 'err', msg: err});
+    })
+})
+
+// Update an Order
+router.post('/update', (req,res) => {
+    if (req.body && req.body.id) {
+        let new_order = {}
+        if (req.body.buyer) new_order.buyer = req.body.buyer;
+        if (req.body.address) new_order.address = req.body.address;
+        if (req.body.contact) new_order.contact = req.body.contact;
+        if (req.body.paid != null) new_order.paid = req.body.paid;
+        if (req.body.ongkir) new_order.ongkir = req.body.ongkir;
+        if (req.body.basket) {
+            let totalPrice = req.body.ongkir;
+                for (let i = 0; i < req.body.basket.length; i++) {
+                    let product = req.body.basket[i];
+                    product.total = product.qty * product.price;
+                    totalPrice += product.total;
+                }
+            new_order.basket = req.body.basket;
+        }
+
+        Order.findOneAndUpdate({_id: req.body.id}, new_order, (err) => {
+            if (!err) res.json({status: 'ok', msg: 'Data orderan telah diubah'});
+            else res.json({status: 'err', msg: 'Coba ulangi kembali'})
+        })
+
+    } else res.json({status: 'err', msg: 'Input ID'})
+})
+
+router.post('/dummy', (req,res) => {
+    res.json({msg: req.body.fakelist});
 })
 module.exports = router;

@@ -16,6 +16,12 @@ var OrderSchema = new Schema({
         qty: Number, 
         total: Number
     }],
+    fakelist: [{
+        name: String, 
+        desc: String,
+        qty: Number, 
+        total: Number
+    }],
     paid: Boolean,
     
 })
