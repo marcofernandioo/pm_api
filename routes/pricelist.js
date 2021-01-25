@@ -28,7 +28,7 @@ router.get('/get', (req,res) => {
             var pricelist = list;
             res.json({status: 'ok', list: pricelist})
         }
-        else res.json({status: 'err', msg: 'Coba ulang kembali'})
+        else res.json({status: 'err', msg: err})
     })
 })
 
