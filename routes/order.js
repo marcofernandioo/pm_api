@@ -142,4 +142,13 @@ router.post('/update', (req,res) => {
 router.post('/dummy', (req,res) => {
     res.json({msg: req.body.fakelist});
 })
+
+router.get('/test', (req,res) => {
+    Order.find((err,data) => {
+        if (!err) {
+            if (data) res.json({status: 'ok', msg: data});
+            else res.json({status: 'err', msg: 'notfound'});
+        } else res.json({status: 'err', msg: err})
+    })
+})
 module.exports = router;
