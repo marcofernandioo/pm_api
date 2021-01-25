@@ -19,8 +19,9 @@ app.use(express.json());
 app.use('/order', orderRouter);
 app.use('/pricelist', pricelistRouter);
 app.use('/sales', salesRouter);
-app.use('/', (req,res) => res.send('Hello There...'))
 app.use('/uwu', (req,res) => res.json({status: 'ok', msg: 'uwu kekw'}))
+app.use('/', (req,res) => res.send('Hello There...'))
+
 
 mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
