@@ -12,7 +12,7 @@ const salesRouter = require('./routes/sales');
 const PORT = process.env.PORT || 8008;
 var app = express();
 
-app.use(cors({credentials: true, origin: process.env.CLIENT}));
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
