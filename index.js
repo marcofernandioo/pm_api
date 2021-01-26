@@ -9,7 +9,7 @@ const orderRouter = require('./routes/order');
 const pricelistRouter = require('./routes/pricelist');
 const salesRouter = require('./routes/sales');
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8001;
 var app = express();
 
 app.use(cors({credentials: true, origin: process.env.CLIENT}));
