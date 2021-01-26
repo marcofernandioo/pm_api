@@ -92,7 +92,7 @@ router.get('/find', (req,res) => {
             if (!err) res.json({status: 'ok', msg: orders})
             else res.json({status: 'err', msg: err})
         })
-    } else res.json({status: 'err', msg: err})
+    } else res.json({status: 'err', msg: 'fuck'})
     
 })
 
