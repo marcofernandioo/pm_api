@@ -24,11 +24,11 @@ app.use('/', (req,res) => res.send('Hello There...'))
 
 
 mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true})
-// .then(() => app.listen(PORT, () => console.log(`listenin' to port ${PORT}`)))
-// .catch((err) => console.log('error: ' + err.message))
-var db = mongoose.connection;
-db.on('listening', () => console.log.bind(console, 'connection err'));
-db.once('open', () => console.log('DB Connected'));
+.then(() => app.listen(PORT, () => console.log(`listenin' to port ${PORT}, database connected`)))
+.catch((err) => console.log('error: ' + err.message))
+// var db = mongoose.connection;
+// db.on('error', () => console.log.bind(console, 'connection err'));
+// db.once('open', () => console.log('DB Connected'));
 
 
-app.listen(PORT, () => console.log(`listenin' to post ${PORT}`))
+// app.listen(PORT, () => console.log(`listenin' to post ${PORT}`))
