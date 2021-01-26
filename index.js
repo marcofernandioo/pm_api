@@ -9,7 +9,7 @@ const orderRouter = require('./routes/order');
 const pricelistRouter = require('./routes/pricelist');
 const salesRouter = require('./routes/sales');
 
-const PORT = process.env.PORT || 8001;
+const PORT = process.env.PORT || 8008;
 var app = express();
 
 app.use(cors({credentials: true, origin: process.env.CLIENT}));
@@ -23,9 +23,11 @@ app.use('/uwu', (req,res) => res.json({status: 'ok', msg: 'uwu kekw'}))
 app.use('/', (req,res) => res.send('Hello There...'))
 
 
-mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true})
+// .then(() => app.listen(PORT, () => console.log(`listenin' to port ${PORT}`)))
+// .catch((err) => console.log('error: ' + err.message))
 var db = mongoose.connection;
-db.on('error', console.log.bind(console, 'connection err'));
+db.on('listening', () => console.log.bind(console, 'connection err'));
 db.once('open', () => console.log('DB Connected'));
 
 
