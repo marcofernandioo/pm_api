@@ -35,6 +35,7 @@ router.post('/add', (req,res) => {
                     orderDate: formattedOrderDate,
                     paid: req.body.paid, 
                     total: totalPrice,
+                    subtotal: totalPrice - req.body.ongkir,
                     basket: req.body.basket, 
                     ongkir: req.body.ongkir,
                     fakelist: req.body.fakelist
@@ -123,7 +124,7 @@ router.post('/update', (req,res) => {
         if (req.body.paid != null) new_order.paid = req.body.paid;
         if (req.body.ongkir) {
             new_order.ongkir = req.body.ongkir;
-            new_order.total = req.body.ongkir + req.body.total;
+            new_order.total = req.body.ongkir + req.body.subtotal;
         }
         // if (req.body.basket) {
         //     for (let i = 0; i < req.body.basket.length; i++) {

@@ -10,6 +10,7 @@ var OrderSchema = new Schema({
     sendDate: Date,
     total: Number, 
     ongkir: Number,
+    subtotal: Number,
     basket: [{
         name: String, 
         desc: String,
