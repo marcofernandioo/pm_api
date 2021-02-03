@@ -9,7 +9,6 @@ router.post('/add', (req,res) => {
         if (req.body.price > 0) {
             var new_product = new Pricelist({
                 name: req.body.name, 
-                category: req.body.category,
                 qty: 0, 
                 price: req.body.price
             });

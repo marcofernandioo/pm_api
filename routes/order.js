@@ -116,20 +116,23 @@ router.get('/delete/:id', (req,res) => {
 router.post('/update', (req,res) => {
     if (req.body && req.body.id) {
         let new_order = {}
+        let totalPrice = req.body.ongkir;
         if (req.body.buyer) new_order.buyer = req.body.buyer;
         if (req.body.address) new_order.address = req.body.address;
         if (req.body.contact) new_order.contact = req.body.contact;
         if (req.body.paid != null) new_order.paid = req.body.paid;
-        if (req.body.ongkir) new_order.ongkir = req.body.ongkir;
-        if (req.body.basket) {
-            let totalPrice = req.body.ongkir;
-                for (let i = 0; i < req.body.basket.length; i++) {
-                    let product = req.body.basket[i];
-                    product.total = product.qty * product.price;
-                    totalPrice += product.total;
-                }
-            new_order.basket = req.body.basket;
+        if (req.body.ongkir) {
+            new_order.ongkir = req.body.ongkir;
+            new_order.total = req.body.ongkir + req.body.total;
         }
+        // if (req.body.basket) {
+        //     for (let i = 0; i < req.body.basket.length; i++) {
+        //         let product = req.body.basket[i];
+        //         product.total = product.qty * product.price;
+        //         totalPrice += product.total;
+        //     }
+        //     new_order.basket = req.body.basket;
+        // }
 
         Order.findOneAndUpdate({_id: req.body.id}, new_order, (err) => {
             if (!err) res.json({status: 'ok', msg: 'Data orderan telah diubah'});
