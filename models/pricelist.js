@@ -5,7 +5,8 @@ var pricelistSchema = new Schema({
     category: String,
     name: String,
     qty: Number,
-    price: Number
+    price: Number, 
+    cost: Number
 })
 
 var priceList = mongoose.model('pricelist', pricelistSchema);
