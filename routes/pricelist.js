@@ -5,7 +5,7 @@ var Pricelist = require('../models/pricelist');
 
 // Add a product to the Pricelist
 router.post('/add', (req,res) => {
-    if (req.body && req.body.name && req.body.price){
+    if (req.body && req.body.name && req.body.price && req.body.cost){
         if (req.body.price > 0) {
             var new_product = new Pricelist({
                 name: req.body.name, 

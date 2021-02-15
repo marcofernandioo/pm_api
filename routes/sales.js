@@ -1,7 +1,30 @@
 var express = require('express');
 var moment = require('moment');
-
 var router = express.Router();
+
+var Order = require('../models/order');
+
+router.get('/dailysales', (req,res) => {
+    Order.find({sendDateString: req.query.date}, (err,orders) => {
+        if (!err) {
+            let salesData = {};
+            salesData.revenue = 0;
+            salesData.profit = 0;
+            salesData.cost = 0;
+            salesData.order_count = orders.length;
+            orders.map((order) => {
+                salesData.revenue += order.total;
+                salesData.cost += order.totalCost;
+                // salesData.profit += 
+            })
+            res.json({status: "ok", msg: salesData})
+        } else {
+            res.json({status: 'err', msg: 'Coba ulangi kembali'})
+        }
+    })
+})
+
+
 
 router.get('/revenue', (req,res) => {
     let startWeek = moment().startOf('isoWeek');

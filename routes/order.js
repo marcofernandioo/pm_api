@@ -16,14 +16,16 @@ router.post('/add', (req,res) => {
         async.waterfall([
             function (calculateTotal) {
                 let totalPrice = req.body.ongkir;
+                let totalCost = 0;
                 for (let i = 0; i < req.body.basket.length; i++) {
                     let product = req.body.basket[i];
                     product.total = product.qty * product.price;
                     totalPrice += product.total;
+                    totalCost += product.cost;
                 }
-                calculateTotal(null, totalPrice);
+                calculateTotal(null, totalPrice, totalCost);
             },
-            function (totalPrice, saveOrder) {
+            function (totalPrice, totalCost, saveOrder) {
                 let fromattedSendDate = moment(req.body.sendDate).format('DD/MM/YYYY');
                 let formattedOrderDate = moment(new Date()).format('DD/MM/YYYY');
                 let new_order = new Order({
@@ -38,7 +40,8 @@ router.post('/add', (req,res) => {
                     subtotal: totalPrice - req.body.ongkir,
                     basket: req.body.basket, 
                     ongkir: req.body.ongkir,
-                    fakelist: req.body.fakelist
+                    fakelist: req.body.fakelist,
+                    totalCost
                 })
                 new_order.save((err) => {
                     if (err) saveOrder(err);
@@ -62,18 +65,6 @@ router.get('/all', (req,res) => {
     })
 })
 
-// Return all baskets in a particular day
-router.get('/baskets', (req,res) => {
-    Order.find( (err,orders) => {
-        if (!err) {
-            let baskets = [];
-            for (let i = 0; i< orders.length; i++) {
-                baskets.push(orders[i].basket);
-            }
-            res.json({status: 'ok', msg: baskets})
-        } else res.json({status: 'err', msg: 'Coba ulangi kembali'})
-    })
-})
 
 // Return ALL of the orders
 router.get('/data', (req,res) => {
@@ -90,10 +81,14 @@ router.get('/data', (req,res) => {
 router.get('/find', (req,res) => {
     if (req.query.date) {
         Order.find({sendDateString: req.query.date}, (err,orders) => {
-            if (!err) res.json({status: 'ok', msg: orders})
+            if (!err) {
+                if (orders) {
+                    res.json({status: 'ok', msg: orders})
+                } else res.json({status: 'err', msg: 'Data tidak ketemu, coba ulangi kembali'})
+            }
             else res.json({status: 'err', msg: err})
         })
-    } else res.json({status: 'err', msg: 'fuck'})
+    } else res.json({status: 'err', msg: 'Coba ulangi kembali'})
     
 })
 
