@@ -6,8 +6,9 @@ var moment = require('moment');
 
 
 var Order = require('../models/order');
-var productOrder = require('../models/productOrder');
+// var productOrder = require('../models/productOrder');
 var Pricelist = require('../models/pricelist');
+var Sales = require('../models/sales');
 
 //Input an Order
 router.post('/add', (req,res) => {
@@ -45,9 +46,27 @@ router.post('/add', (req,res) => {
                 })
                 new_order.save((err) => {
                     if (err) saveOrder(err);
-                    else saveOrder(null);
+                    else saveOrder(null, totalPrice, totalCost);
                 })
-            }
+            }, 
+            // function (totalPrice, totalCost, saveSalesData) {
+            //     let salesData = {
+            //         date: req.query.sendDate,
+            //         revenue: totalPrice, 
+            //         cost: totalCost, 
+            //         profit: totalPrice,
+            //         orders: 1
+            //     }
+            //     Sales.findOneAndUpdate({sendDate: {
+            //         $gte: new Date(new Date(req.body.sendDate).setHours(00,00,00)),
+            //         $lte: new Date(new Date(req.body.sendDate).setHours(23,59,59))
+            //     }}, 
+            //     {upsert: true}, (err,sales) => {
+            //         if (!err) {
+                        
+            //         }
+            //     })
+            // }
         ], (err) => {
             if (err) res.json({status: 'error', msg: err});
             else res.json({status: 'ok', msg: 'Orderan telah tercatat'})
@@ -138,8 +157,18 @@ router.post('/update', (req,res) => {
     } else res.json({status: 'err', msg: 'Input ID'})
 })
 
-router.post('/dummy', (req,res) => {
-    res.json({msg: req.body.fakelist});
+router.get('/daterange', (req,res) => {
+    if (req.query.startdate != '' && req.query.enddate != '') {
+        Order.find({sendDate: {
+            $gte: new Date(new Date(req.query.startdate).setHours(00,00,00)),
+            $lte: new Date(new Date(req.query.enddate).setHours(23,59,59))
+        }}, (err,orders) => {
+            if (!err) res.json({status: 'ok', msg: orders});
+            else res.json({status: 'err', msg: 'Coba ulangi kembali'});
+        })
+    } else {
+        res.json({status: 'err', msg: 'Query tidak lengkap'})
+    }
 })
 
 router.get('/test', (req,res) => {
