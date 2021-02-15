@@ -5,7 +5,8 @@ var SalesSchema = new Schema({
     date: Date,
     revenue: Number,
     cost: Number,
-    profit: Number
+    profit: Number,
+    orders: Number
 })
 
 var Sales = mongoose.model('sales', SalesSchema);
