@@ -24,7 +24,7 @@ var OrderSchema = new Schema({
         total: Number
     }],
     paid: Boolean,
-    
+    totalCost: Number
 })
 
 var Order = mongoose.model('Order', OrderSchema);
