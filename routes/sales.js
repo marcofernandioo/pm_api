@@ -19,7 +19,7 @@ router.get('/rangesales', (req,res) => {
                 let order = orders[i];
                 salesData.revenue += order.total;
                 salesData.cost += order.totalCost;
-                salesData.profit += order.total - order.totalCost;
+                salesData.profit += order.subtotal - order.totalCost + order.ongkir;
             }
             
             res.json({status: "ok", msg: salesData})

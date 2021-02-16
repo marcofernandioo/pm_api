@@ -22,7 +22,7 @@ router.post('/add', (req,res) => {
                     let product = req.body.basket[i];
                     product.total = product.qty * product.price;
                     totalPrice += product.total;
-                    totalCost += product.cost;
+                    totalCost += product.qty * product.cost;
                 }
                 calculateTotal(null, totalPrice, totalCost);
             },
