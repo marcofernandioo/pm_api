@@ -22,7 +22,6 @@ router.get('/rangesales', (req,res) => {
                     salesData.cost += order.totalCost;
                     salesData.profit += order.subtotal - order.totalCost + order.ongkir;
                 }
-                
                 res.json({status: "ok", msg: salesData})
             } else {
                 res.json({status: 'err', msg: 'Coba ulangi kembali'})

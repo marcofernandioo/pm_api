@@ -27,8 +27,8 @@ router.post('/add', (req,res) => {
                 calculateTotal(null, totalPrice, totalCost);
             },
             function (totalPrice, totalCost, saveOrder) {
-                let fromattedSendDate = moment(req.body.sendDate).format('DD/MM/YYYY');
-                let formattedOrderDate = moment(new Date()).format('DD/MM/YYYY');
+                let fromattedSendDate = moment(req.body.sendDate).format('DD-MM-YYYY');
+                let formattedOrderDate = moment(new Date()).format('DD-MM-YYYY');
                 let new_order = new Order({
                     buyer: req.body.buyer,
                     address: req.body.address,
