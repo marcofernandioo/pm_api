@@ -98,14 +98,13 @@ router.get('/data', (req,res) => {
 
 // Find Orders based on Date
 router.get('/find', (req,res) => {
-    if (req.query.date) {
-        Order.find({sendDateString: req.query.date}, (err,orders) => {
-            if (!err) {
-                if (orders) {
-                    res.json({status: 'ok', msg: orders})
-                } else res.json({status: 'err', msg: 'Data tidak ketemu, coba ulangi kembali'})
-            }
-            else res.json({status: 'err', msg: err})
+    if (req.query.date != '') {
+        Order.find({sendDate: {
+            $gte: new Date(new Date(req.query.date).setHours(00,00,00)),
+            $lte: new Date(new Date(req.query.date).setHours(23,59,59))
+        }}, (err,orders) => {
+            if (!err) res.json({status: 'ok', msg: orders});
+            else res.json({status: 'err', msg: 'Coba ulangi kembali'});
         })
     } else res.json({status: 'err', msg: 'Coba ulangi kembali'})
     
