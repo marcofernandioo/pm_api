@@ -56,15 +56,19 @@ router.get('/statistics', (req,res) => {
                         statistics[date].profit += orders[i].total - orders[i].totalCost
                     }
                 }
-                salesData = []
+                salesData = {};
+                date = [];
+                revenue = [];
+                profit = [];
                 for (let i = 0; i < Object.keys(statistics).length; i++) {
-                    let data = {}, currentDate = Object.keys(statistics)[i];
-                    data.date = currentDate;
-                    data.revenue = statistics[currentDate].revenue;
-                    data.cost = statistics[currentDate].cost;
-                    data.profit = statistics[currentDate].profit;
-                    salesData.push(data);
+                    let currentDate = Object.keys(statistics)[i];
+                    date.push(currentDate);
+                    revenue.push(statistics[currentDate].revenue)
+                    profit.push(statistics[currentDate].profit)  
                 }
+                salesData.date = date;
+                salesData.revenue = revenue;
+                salesData.profit = profit;
                 res.json({status: 'ok', salesData})
             } else {
                 res.json({status: 'err', msg: err});
@@ -77,7 +81,5 @@ router.get('/statistics', (req,res) => {
 
 // $gte: Greater than Equal to
 // $lte: Less than Equal to 
-
-
 
 module.exports = router;
