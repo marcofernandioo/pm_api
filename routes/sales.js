@@ -70,8 +70,8 @@ router.get('/statistics', (req,res) => {
                 for (let i = 0; i < Object.keys(statistics).length; i++) {
                     let currentDate = Object.keys(statistics)[i];
                     date.push(currentDate);
-                    revenue.push(formatCurrency(statistics[currentDate].revenue));
-                    profit.push(formatCurrency(statistics[currentDate].profit));  
+                    revenue.push(statistics[currentDate].revenue);
+                    profit.push(statistics[currentDate].profit);  
                 }
                 salesData.date = date;
                 salesData.revenue = revenue;
