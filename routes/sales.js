@@ -33,6 +33,13 @@ router.get('/rangesales', (req,res) => {
     
 })
 
+const formatter = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'IDR'});
+function formatCurrency(num) {
+    let res = formatter.format(num).split('IDR');
+    res = res.slice(1);
+    return `Rp.${res}`
+}
+
 router.get('/statistics', (req,res) => {
     if (req.query.startdate != '' && req.query.enddate != '') {
         Order.find({sendDate: {
@@ -63,8 +70,8 @@ router.get('/statistics', (req,res) => {
                 for (let i = 0; i < Object.keys(statistics).length; i++) {
                     let currentDate = Object.keys(statistics)[i];
                     date.push(currentDate);
-                    revenue.push(statistics[currentDate].revenue)
-                    profit.push(statistics[currentDate].profit)  
+                    revenue.push(formatCurrency(statistics[currentDate].revenue));
+                    profit.push(formatCurrency(statistics[currentDate].profit));  
                 }
                 salesData.date = date;
                 salesData.revenue = revenue;
