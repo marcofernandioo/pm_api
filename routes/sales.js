@@ -1,9 +1,7 @@
 var express = require('express');
-var moment = require('moment');
 var router = express.Router();
 
 var Order = require('../models/order');
-var Sales = require('../models/sales');
 
 router.get('/rangesales', (req,res) => {
     if (req.query.startdate != '' && req.query.enddate != '') {
@@ -33,13 +31,6 @@ router.get('/rangesales', (req,res) => {
     
 })
 
-const formatter = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'IDR'});
-function formatCurrency(num) {
-    let res = formatter.format(num).split('IDR');
-    res = res.slice(1);
-    return `Rp.${res}`
-}
-
 router.get('/statistics', (req,res) => {
     if (req.query.startdate != '' && req.query.enddate != '') {
         Order.find({sendDate: {
@@ -48,7 +39,6 @@ router.get('/statistics', (req,res) => {
         }}, (err,orders) => {
             if (!err) {
                 let statistics = {};
-                // let netRevenue = 0, netCost = 0, netProfit = 0;
                 for (let i = 0; i < orders.length; i++) {
                     let date = orders[i].sendDateString;
                     if (!statistics[date]) {
@@ -58,7 +48,7 @@ router.get('/statistics', (req,res) => {
                             profit: orders[i].total - orders[i].totalCost,
                         };
                     } else {
-                        statistics[date].total += orders[i].total,
+                        statistics[date].revenue += orders[i].total,
                         statistics[date].cost += orders[i].cost,
                         statistics[date].profit += orders[i].total - orders[i].totalCost
                     }
