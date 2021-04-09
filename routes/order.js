@@ -12,8 +12,7 @@ var Sales = require('../models/sales');
 
 //Input an Order
 router.post('/add', (req,res) => {
-    if (req.body && req.body.buyer && req.body.address && req.body.contact && req.body.basket.length > 0 && req.body.fakelist) {
-        
+    if (req.body && req.body.buyer && req.body.address && req.body.contact && req.body.basket.length > 0) {
         async.waterfall([
             function (calculateTotal) {
                 let totalPrice = req.body.ongkir;
@@ -49,24 +48,6 @@ router.post('/add', (req,res) => {
                     else saveOrder(null, totalPrice, totalCost);
                 })
             }, 
-            // function (totalPrice, totalCost, saveSalesData) {
-            //     let salesData = {
-            //         date: req.query.sendDate,
-            //         revenue: totalPrice, 
-            //         cost: totalCost, 
-            //         profit: totalPrice,
-            //         orders: 1
-            //     }
-            //     Sales.findOneAndUpdate({sendDate: {
-            //         $gte: new Date(new Date(req.body.sendDate).setHours(00,00,00)),
-            //         $lte: new Date(new Date(req.body.sendDate).setHours(23,59,59))
-            //     }}, 
-            //     {upsert: true}, (err,sales) => {
-            //         if (!err) {
-                        
-            //         }
-            //     })
-            // }
         ], (err) => {
             if (err) res.json({status: 'error', msg: err});
             else res.json({status: 'ok', msg: 'Orderan telah tercatat'})
@@ -89,7 +70,6 @@ router.get('/all', (req,res) => {
 router.get('/data', (req,res) => {
     Order.find((err,orders) => {
         if (!err) {
-            // let data =  [];
             res.json({status: 'ok', msg: orders});
         }
         else res.json({status: 'err', msg: 'Coba ulangi kembali'});
@@ -139,15 +119,7 @@ router.post('/update', (req,res) => {
             new_order.ongkir = req.body.ongkir;
             new_order.total = req.body.ongkir + req.body.subtotal;
         }
-        // if (req.body.basket) {
-        //     for (let i = 0; i < req.body.basket.length; i++) {
-        //         let product = req.body.basket[i];
-        //         product.total = product.qty * product.price;
-        //         totalPrice += product.total;
-        //     }
-        //     new_order.basket = req.body.basket;
-        // }
-
+        if (req.body.sendDate) new_order =  req.body.sendDate;
         Order.findOneAndUpdate({_id: req.body.id}, new_order, (err) => {
             if (!err) res.json({status: 'ok', msg: 'Data orderan telah diubah'});
             else res.json({status: 'err', msg: 'Coba ulangi kembali'})
