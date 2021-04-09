@@ -119,7 +119,7 @@ router.post('/update', (req,res) => {
             new_order.ongkir = req.body.ongkir;
             new_order.total = req.body.ongkir + req.body.subtotal;
         }
-        if (req.body.sendDate) new_order =  req.body.sendDate;
+        if (req.body.sendDate) new_order.sendDate =  req.body.sendDate;
         Order.findOneAndUpdate({_id: req.body.id}, new_order, (err) => {
             if (!err) res.json({status: 'ok', msg: 'Data orderan telah diubah'});
             else res.json({status: 'err', msg: 'Coba ulangi kembali'})
